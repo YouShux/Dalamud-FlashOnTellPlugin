@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Dalamud.NET.Sdk/12.0.2">
+<Project Sdk="Dalamud.NET.Sdk/13.0.0">
 	<PropertyGroup>
 		<NoWarn>IDE0003</NoWarn>
-		<AssemblyVersion>0.0.8.0</AssemblyVersion>
-		<Platforms>x64</Platforms>
+		<AssemblyVersion>0.0.9.0</AssemblyVersion>
 	</PropertyGroup>
 	<ItemGroup>
 		<Content Include="..\images\icon.png" Link="images/icon.png" CopyToOutputDirectory="PreserveNewest" Visible="false" />
