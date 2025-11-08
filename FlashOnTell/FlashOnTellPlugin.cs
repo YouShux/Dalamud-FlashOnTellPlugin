@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Dalamud.Game.Text.SeStringHandling;
-using Dalamud.IoC;
-using Dalamud.Plugin;
-using FlashOnTell.Attributes;
+using AEAssist;
 using Dalamud.Game.Text;
+using Dalamud.Game.Text.SeStringHandling;
+using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
-using System.Net.Security;
-using System.Threading;
-using System.Threading.Tasks;
+using FlashOnTell.Attributes;
 
 namespace FlashOnTell
 {
@@ -25,7 +22,7 @@ namespace FlashOnTell
         public FlashOnTellPlugin(IDalamudPluginInterface pluginInterface, ICommandManager command)
         {
             Interface = pluginInterface;
-            Config = (Configuration)Interface.GetPluginConfig() ?? new Configuration();
+            Config = Interface.GetPluginConfig() as Configuration ?? new Configuration();
             Config.Initialize(Interface);
             Interface.Create<Service>();
 
@@ -79,9 +76,9 @@ namespace FlashOnTell
         {
             // You may want to assign these references to private variables for convenience.
             // Keep in mind that the local player does not exist until after logging in.
-            Chat.Print($"FlashOnTell will try to flash the icon in 3 seconds. This generally won't work because it's the active window unless you tab out immediately.");
+            Chat.Print("FlashOnTell will try to flash the icon in 3 seconds. This generally won't work because it's the active window unless you tab out immediately.");
             Logger.Debug("Attempted to flashontell but window is active.");
-            await Task.Delay(3000);
+            await Coroutine.Instance.WaitAsync(3000);
             var flashInfo = new FlashWindow.FLASHWINFO
             {
                 cbSize = (uint)Marshal.SizeOf<FlashWindow.FLASHWINFO>(),

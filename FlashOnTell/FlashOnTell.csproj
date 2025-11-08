@@ -4,7 +4,18 @@
 		<NoWarn>IDE0003</NoWarn>
 		<AssemblyVersion>0.0.9.0</AssemblyVersion>
 	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+	  <OutputPath>D:\插件\FlashOnTell</OutputPath>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+	  <OutputPath>D:\插件\FlashOnTell</OutputPath>
+	</PropertyGroup>
 	<ItemGroup>
 		<Content Include="..\images\icon.png" Link="images/icon.png" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="AEAssist.NET" Version="1.2.3" />
+	  <PackageReference Update="DotNet.ReproducibleBuilds" Version="1.2.39" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 	</ItemGroup>
 </Project>

@@ -1,7 +1,6 @@
-﻿using Dalamud.Configuration;
+using Dalamud.Configuration;
 using Dalamud.Plugin;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace FlashOnTell
 {
@@ -9,8 +8,8 @@ namespace FlashOnTell
     {
         public int Version { get; set; }
 
-        // Add any other properties or methods here.
-        [JsonIgnore] private IDalamudPluginInterface pluginInterface;
+        // 配置保存时不序列化插件接口
+        [JsonIgnore] private IDalamudPluginInterface pluginInterface = null!;
 
         public void Initialize(IDalamudPluginInterface pluginInterface)
         {
@@ -20,7 +19,7 @@ namespace FlashOnTell
 
         public void Save()
         {
-            this.pluginInterface.SavePluginConfig(this);
+            pluginInterface.SavePluginConfig(this);
         }
     }
 }

@@ -1,10 +1,10 @@
-﻿using Dalamud.Game.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using FlashOnTell.Attributes;
+using Dalamud.Game.Command;
 using Dalamud.Plugin.Services;
+using FlashOnTell.Attributes;
 using static Dalamud.Game.Command.IReadOnlyCommandInfo;
 // ReSharper disable ForCanBeConvertedToForeach
 
@@ -18,10 +18,10 @@ namespace FlashOnTell
 
         public PluginCommandManager(THost host, ICommandManager command)
         {
-            this.command = command;
-            this.host = host;
+            this.command = command ?? throw new ArgumentNullException(nameof(command));
+            this.host = host ?? throw new ArgumentNullException(nameof(host));
 
-            this.pluginCommands = host.GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance)
+            pluginCommands = host.GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance)
                 .Where(method => method.GetCustomAttribute<CommandAttribute>() != null)
                 .SelectMany(GetCommandInfoTuple)
                 .ToArray();
@@ -35,25 +35,25 @@ namespace FlashOnTell
         // It's usually sub-1 millisecond anyways, though. It probably doesn't matter at all.
         private void AddCommandHandlers()
         {
-            for (var i = 0; i < this.pluginCommands.Length; i++)
+            for (var i = 0; i < pluginCommands.Length; i++)
             {
-                var (command, commandInfo) = this.pluginCommands[i];
-                this.command.AddHandler(command, commandInfo);
+                var (command, commandInfo) = pluginCommands[i];
+                this.command!.AddHandler(command, commandInfo);
             }
         }
 
         private void RemoveCommandHandlers()
         {
-            for (var i = 0; i < this.pluginCommands.Length; i++)
+            for (var i = 0; i < pluginCommands.Length; i++)
             {
-                var (command, _) = this.pluginCommands[i];
-                this.command.RemoveHandler(command);
+                var (command, _) = pluginCommands[i];
+                this.command!.RemoveHandler(command);
             }
         }
 
         private IEnumerable<(string, CommandInfo)> GetCommandInfoTuple(MethodInfo method)
         {
-            var handlerDelegate = (HandlerDelegate)Delegate.CreateDelegate(typeof(HandlerDelegate), this.host, method);
+            var handlerDelegate = (HandlerDelegate)Delegate.CreateDelegate(typeof(HandlerDelegate), host, method);
 
             var command = handlerDelegate.Method.GetCustomAttribute<CommandAttribute>();
             var aliases = handlerDelegate.Method.GetCustomAttribute<AliasesAttribute>();
@@ -68,7 +68,7 @@ namespace FlashOnTell
 
             // Create list of tuples that will be filled with one tuple per alias, in addition to the base command tuple.
             var commandInfoTuples = new List<(string, CommandInfo)> { (command.Command, commandInfo) };
-            if (aliases != null)
+            if (aliases?.Aliases != null)
             {
                 // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var i = 0; i < aliases.Aliases.Length; i++)

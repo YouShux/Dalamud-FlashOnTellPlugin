@@ -107,7 +107,7 @@ namespace FlashOnTell
         /// A boolean value indicating whether the application is running on Windows 2000 or later.
         private static bool Win2000OrLater
         {
-            get { return System.Environment.OSVersion.Version.Major >= 5; }
+            get { return Environment.OSVersion.Version.Major >= 5; }
         }
 
     }
